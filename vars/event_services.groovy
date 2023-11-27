@@ -1,0 +1,29 @@
+def call(dockerRepoName, imageName) {
+pipeline {
+    agent any
+    stages {
+        stage("Lint") {
+            steps {
+                sh 'find . -type f -name "*.py" | xargs pylint --fail-under=5.0'
+            }
+        }
+        stage('Security') {
+            steps {
+                sh 'bandit -r *.py'
+            }
+        }
+        stage('Package') {
+            when {
+                expression { env.GIT_BRANCH == 'origin/main' }
+            }
+            steps {
+                withCredentials([string(credentialsId: 'DockerHub', variable: 'TOKEN')]) {
+                    sh "docker login -u 'satonohime' -p '$TOKEN' docker.io"
+                    sh "docker build -t ${dockerRepoName}:latest --tag satonohime/${dockerRepoName}:${imageName} ."
+                    sh "docker push satonohime/${dockerRepoName}:${imageName}"
+                }
+            }
+        }
+    }
+}
+}
