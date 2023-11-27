@@ -24,7 +24,6 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'DockerHub', variable: 'TOKEN')]) {
-                    sh "sudo usermod -a -G docker jenkins"
                     sh "docker login -u 'satonohime' -p '$TOKEN' docker.io"
                     sh "docker build -t ${dockerRepoName}:latest --tag satonohime/${dockerRepoName}:${imageName} ."
                     sh "docker push satonohime/${dockerRepoName}:${imageName}"
