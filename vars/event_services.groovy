@@ -37,7 +37,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([sshUserPrivateKey(credentialsId: 'rc-kafka-key', keyFileVariable: 'SSH_FILE', usernameVariable: 'SSH_USER')]) {
-                        sshAgent(['rc-kafka-key']) {
+                        sshagent(['rc-kafka-key']) {
                             sshCommand remote: [
                                 name: 104.42.179.109,
                                 host: 104.42.179.109,
@@ -46,9 +46,9 @@ pipeline {
                                 allowAnyHosts: true
                             ], command: """
                                 cd /home/azureuser/4850/deployment &&
-                                        docker compose down &&
-                                        docker image pull satonohime/${dockerRepoName}:${imageName} &&
-                                        docker compose up -d
+                                docker compose down &&
+                                docker image pull satonohime/${dockerRepoName}:${imageName} &&
+                                docker compose up -d
                             """
                         }
                     }
