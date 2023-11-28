@@ -36,22 +36,19 @@ def call(dockerRepoName, imageName) {
                 }
                 steps {
                     withCredentials([sshUserPrivateKey(credentialsId: 'rc-kafka-key', keyFileVariable: 'SSH_FILE', usernameVariable: 'SSH_USER')]) {
-                        script {
-                            def remote [:]
-                            remote.name = '104.42.179.109'
-                            remote.host = '104.42.179.109'
-                            remote.user = SSH_USER
-                            remote.identityFile = SSH_FILE
-                            remote.allowAnyHosts = true
-                            command = """
+                        sshagent(['rc-kafka-key']) {
+                            sshCommand remote: [
+                                name: '104.42.179.109',
+                                host: '104.42.179.109',
+                                user: SSH_USER,
+                                identityFile: SSH_FILE,
+                                allowAnyHosts: 'true'
+                            ], command: """
                                 cd /home/azureuser/4850/deployment &&
                                 docker compose down &&
                                 docker image pull satonohime/${dockerRepoName}:${imageName} &&
                                 docker compose up -d
                             """
-                            sshagent(['rc-kafka-key']) {
-                                sshCommand remote: remote, command: command
-                            }
                         }
                     }
                 }
