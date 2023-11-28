@@ -31,9 +31,6 @@ def call(dockerRepoName, imageName) {
                 }
             }
             stage('Deploy') {
-                when {
-                    expression { env.GIT_BRANCH == 'origin/main' }
-                }
                 steps {
                     withCredentials([sshUserPrivateKey(credentialsId: 'rc-kafka-key', keyFileVariable: 'SSH_FILE', usernameVariable: 'SSH_USER')]) {
                         sshagent(['rc-kafka-key']) {
