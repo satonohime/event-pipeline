@@ -35,8 +35,8 @@ def call(dockerRepoName, imageName) {
                     expression { env.GIT_BRANCH == 'origin/main' }
                 }
                 steps {
-                    script {
-                        withCredentials([sshUserPrivateKey(credentialsId: 'rc-kafka-key', keyFileVariable: 'SSH_FILE', usernameVariable: 'SSH_USER')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'rc-kafka-key', keyFileVariable: 'SSH_FILE', usernameVariable: 'SSH_USER')]) {
+                        script {
                             def remote [:]
                             remote.name = '104.42.179.109'
                             remote.host = '104.42.179.109'
@@ -59,3 +59,4 @@ def call(dockerRepoName, imageName) {
         }
     }
 }
+
