@@ -35,7 +35,7 @@ pipeline {
                 expression { env.GIT_BRANCH == 'origin/main' }
             }
             withCredentials([sshUserPrivateKey(credentialsId: 'rc-kafka-key', keyFileVariable: 'SSH_FILE', usernameVariable: 'SSH_USER')]) 
-                sshAgent(['rc-kafka-key']) remote {
+                sshAgent(['rc-kafka-key']) {
                     sshCommand remote: [
                         name: 104.42.179.109,
                         host: 104.42.179.109,
