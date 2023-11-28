@@ -34,20 +34,22 @@ pipeline {
             when {
                 expression { env.GIT_BRANCH == 'origin/main' }
             }
-            withCredentials([sshUserPrivateKey(credentialsId: 'rc-kafka-key', keyFileVariable: 'SSH_FILE', usernameVariable: 'SSH_USER')]) {
-                sshAgent(['rc-kafka-key']) {
-                    sshCommand remote: [
-                        name: 104.42.179.109,
-                        host: 104.42.179.109,
-                        user: 'SSH_USER',
-                        identityFile: 'SSH_FILE',
-                        allowAnyHosts: true
-                    ], command: """
-                        cd /home/azureuser/4850/deployment &&
-                                docker compose down &&
-                                docker image pull satonohime/${dockerRepoName}:${imageName} &&
-                                docker compose up -d
-                    """
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'rc-kafka-key', keyFileVariable: 'SSH_FILE', usernameVariable: 'SSH_USER')]) {
+                    sshAgent(['rc-kafka-key']) {
+                        sshCommand remote: [
+                            name: 104.42.179.109,
+                            host: 104.42.179.109,
+                            user: 'SSH_USER',
+                            identityFile: 'SSH_FILE',
+                            allowAnyHosts: true
+                        ], command: """
+                            cd /home/azureuser/4850/deployment &&
+                                    docker compose down &&
+                                    docker image pull satonohime/${dockerRepoName}:${imageName} &&
+                                    docker compose up -d
+                        """
+                    }
                 }
             }
         }
