@@ -30,7 +30,6 @@ def call(dockerRepoName, imageName) {
                     }
                 }
             }
-            
             stage('Deploy') {
                 steps {
                     withCredentials([sshUserPrivateKey(credentialsId: 'rc-kafka-key', keyFileVariable: 'SSH_FILE', usernameVariable: 'SSH_USER')]) {
