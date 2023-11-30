@@ -43,7 +43,6 @@ def call(dockerRepoName, imageName) {
                                 allowAnyHosts: 'true'
                             ], command: """
                                 cd /home/azureuser/4850/deployment &&
-                                docker compose down &&
                                 docker image pull satonohime/${dockerRepoName}:${imageName} &&
                                 docker compose up -d
                             """
